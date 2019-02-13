@@ -13,7 +13,7 @@ library(shinyWidgets)
 # Read Data
 
 CallData <- read.csv(textConnection("
-MonthNo,Month,Answered Call Volume,Answer Time
+MonthNo,Month,AnsweredCallVolume,AnswerTime
 1,January,7140,86592
 2,February,6226,88074
 3,March,6649,104399
@@ -32,25 +32,29 @@ MonthNo,Month,Answered Call Volume,Answer Time
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel("Measure Call Data in a specific Range"),
+  titlePanel("Measure Average Speed to Answer based on input call data in a specific Range"),
+  
   
   # Sidebar with a slider input for months 
   sidebarLayout(
     sidebarPanel(
-      sliderTextInput(
+        helpText("Please choose the date range"),
+        sliderTextInput(
         inputId = "MonthRange",
         label = "Month range slider:",
         choices = CallData$Month,
         selected = CallData[CallData$MonthNo[c(4, 7)],2]
-        )
+        ),
+        helpText("Based on Date Range selection Input data is:"),
+        tableOutput("inputData")
     ),
     
     # Show a plot of the generated distribution
    mainPanel(
       # Create tab panes
       tabsetPanel(type="tab",
-                  tabPanel("Data", tableOutput("displayData")),
-                  tabPanel("Plot", plotOutput("mygraph"))
+                  tabPanel("Output Data", tableOutput("displayData"),"This will show Data after caluclation Avg Speed to Ans(last column)"),
+                  tabPanel("Output Plot", plotOutput("mygraph"),"This will show Avg Speed to answer trend")
       )
     )
   )

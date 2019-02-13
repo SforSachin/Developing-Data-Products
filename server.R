@@ -13,7 +13,7 @@ library(dplyr)
 # Read Data
 
 CallData <- read.csv(textConnection("
-MonthNo,Month,Answered Call Volume,Answer Time
+MonthNo,Month,AnsweredCallVolume,AnswerTime
 1,January,7140,86592
 2,February,6226,88074
 3,March,6649,104399
@@ -36,7 +36,10 @@ shinyServer(function(input, output) {
     myFinalData <- reactive({
     myData<-CallData[CallData$MonthNo[which(CallData$Month == input$MonthRange[1])]:CallData$MonthNo[which(CallData$Month == input$MonthRange[2])],]
 
-    data.frame(myData %>%  mutate(AvgSpeedToAns=as.integer(myData$Answer.Time/myData$Answered.Call.Volume)) )
+    #Show input data
+    output$inputData = renderTable(myData)
+    
+    data.frame(myData %>%  mutate(AvgSpeedToAns=as.integer(myData$AnswerTime/myData$AnsweredCallVolume)) )
   })
   
   # Prepare "Data tab"
